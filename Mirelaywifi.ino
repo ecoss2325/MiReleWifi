@@ -4,7 +4,7 @@
 const char* SSID = "YOUR SSID";
 const char* PASSWORD = "YOUR PASSWORD";
 
-int PinRele01 = 13;
+int PinRele01 = 2;
 int PinRele02 = 3;
 int PinRele03 = 4;
 int PinRele04 = 5;
