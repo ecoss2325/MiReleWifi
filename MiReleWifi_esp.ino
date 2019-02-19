@@ -82,24 +82,16 @@ void loop() {
   int val01;
   int val02;
   
-  if (req.indexOf("/Relay01=1") != -1)
+  if (req.indexOf("Relay01=1") != -1){
     val01 = 0;
-  else if (req.indexOf("/Relay01=0") != -1)
+  } else if (req.indexOf("Relay01=0") != -1){
     val01 = 1;
-  else {
-    Serial.println("invalid request");
-    client.stop();
-    return;
   }
-  
-  if (req.indexOf("/Relay02=1") != -1)
+ 
+  if (req.indexOf("Relay02=1") != -1){
     val02 = 0;
-  else if (req.indexOf("/Relay02=0") != -1)
+  } else if (req.indexOf("Relay02=0") != -1){
     val02 = 1;
-  else {
-    Serial.println("invalid request");
-    client.stop();
-    return;
   }
 
   // Set GPIO3 according to the request
