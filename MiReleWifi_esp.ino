@@ -1,11 +1,11 @@
 /*
  *  This sketch demonstrates how to set up a simple HTTP-like server.
  *  The server will set a GPIO pin depending on the request
- *    http://server_ip/Relay01=0 will set the GPIO3 low,
- *    http://server_ip/Relay01=1 will set the GPIO3 high
+ *    http://server_ip/Relay01=0 will set the GPIO4 low,
+ *    http://server_ip/Relay01=1 will set the GPIO4 high
  
- *    http://server_ip/Relay02=0 will set the GPIO4 low,
- *    http://server_ip/Relay02=1 will set the GPIO4 high
+ *    http://server_ip/Relay02=0 will set the GPIO5 low,
+ *    http://server_ip/Relay02=1 will set the GPIO5 high
  
  *  server_ip is the IP address of the ESP8266 module, will be 
  *  printed to Serial when the module is connected.
@@ -26,13 +26,13 @@ void setup() {
   delay(10);
   
 
-  // prepare GPIO3
-  pinMode(3, OUTPUT);
-  digitalWrite(3, 1);
-  
-  // prepare GPIO4
+  // prepare GPIO4 PIN D2 NodeMcu
   pinMode(4, OUTPUT);
-  digitalWrite(4, 1);
+  digitalWrite(4, 0);
+  
+  // prepare GPIO5 PIN D1 NodeMcu
+  pinMode(5, OUTPUT);
+  digitalWrite(5, 0);
   
   // Connect to WiFi network
   Serial.println();
@@ -57,10 +57,11 @@ void setup() {
   Serial.println(WiFi.localIP());
 }
 
+  // Match the request
+  int val01;
+  int val02;
+
 void loop() {
-
-
-  
   // Check if a client has connected
   WiFiClient client = server.available();
   if (!client) {
@@ -78,27 +79,23 @@ void loop() {
   Serial.println(req);
   client.flush();
   
-  // Match the request
-  int val01;
-  int val02;
-  
   if (req.indexOf("Relay01=1") != -1){
-    val01 = 0;
-  } else if (req.indexOf("Relay01=0") != -1){
     val01 = 1;
+  }else if (req.indexOf("Relay01=0") != -1){
+    val01 = 0;
   }
  
   if (req.indexOf("Relay02=1") != -1){
-    val02 = 0;
-  } else if (req.indexOf("Relay02=0") != -1){
     val02 = 1;
+  }else if (req.indexOf("Relay02=0") != -1){
+    val02 = 0;
   }
 
   // Set GPIO3 according to the request
-  digitalWrite(3, val01);
+  digitalWrite(4, val01);
   
   // Set GPIO4 according to the request
-  digitalWrite(4, val02);
+  digitalWrite(5, val02);
   
   client.flush();
 
