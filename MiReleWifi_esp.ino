@@ -1,4 +1,4 @@
-/*
+*
  *  This sketch demonstrates how to set up a simple HTTP-like server.
  *  The server will set a GPIO pin depending on the request
  *    http://server_ip/Relay01=0 will set the GPIO4 low,
@@ -6,6 +6,12 @@
  
  *    http://server_ip/Relay02=0 will set the GPIO5 low,
  *    http://server_ip/Relay02=1 will set the GPIO5 high
+ *    
+ *    http://server_ip/Relay03=0 will set the GPIO14 low,
+ *    http://server_ip/Relay03=1 will set the GPIO14 high
+ 
+ *    http://server_ip/Relay04=0 will set the GPIO12 low,
+ *    http://server_ip/Relay04=1 will set the GPIO12 high
  
  *  server_ip is the IP address of the ESP8266 module, will be 
  *  printed to Serial when the module is connected.
@@ -33,6 +39,16 @@ void setup() {
   // prepare GPIO5 PIN D1 NodeMcu
   pinMode(5, OUTPUT);
   digitalWrite(5, 0);
+
+   // prepare GPIO14 PIN D5 NodeMcu
+  pinMode(14, OUTPUT);
+  digitalWrite(14, 0);
+  
+  // prepare GPIO12 PIN D6 NodeMcu
+  pinMode(12, OUTPUT);
+  digitalWrite(12, 0);
+
+  
   
   // Connect to WiFi network
   Serial.println();
@@ -55,11 +71,15 @@ void setup() {
 
   // Print the IP address
   Serial.println(WiFi.localIP());
+  
+  String wifi=String(WiFi.localIP());
 }
 
   // Match the request
   int val01;
   int val02;
+  int val03;
+  int val04;
 
 void loop() {
   // Check if a client has connected
@@ -91,23 +111,59 @@ void loop() {
     val02 = 0;
   }
 
+  if (req.indexOf("Relay03=1") != -1){
+    val03 = 1;
+  }else if (req.indexOf("Relay03=0") != -1){
+    val03 = 0;
+  }
+
+  if (req.indexOf("Relay04=1") != -1){
+    val04 = 1;
+  }else if (req.indexOf("Relay04=0") != -1){
+    val04 = 0;
+  }
+
   // Set GPIO3 according to the request
   digitalWrite(4, val01);
   
   // Set GPIO4 according to the request
   digitalWrite(5, val02);
+
+  // Set GPIO14 according to the request
+  digitalWrite(14, val03);
+  
+  // Set GPIO12 according to the request
+  digitalWrite(12, val04);
   
   client.flush();
 
   // Prepare the response
-  String s = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE HTML>\r\n<html>\r\nRelay01 ";
-  s += (val01)?"Activated":"Disactivated" ;
-  s += "\r\nRelay02 " ;
-  s += (val02)?"Activated":"Disactivated" ;
-  s += "</html>\n";
+
+    client.println(F("HTTP/1.1 200 OK"));
+    client.println(F("Content-Type: application/json;charset=utf-8"));
+    client.println(F("Connection: close"));  
+    //String sr = "<!DOCTYPE HTML>\n";
+    //sr += "<html>\n";
+    //sr += "<body>\n";
+    String sr = "[{\"REL01\":\"";
+    sr += val01;
+    sr += "\",\"REL02\":\"";
+    sr += val02;
+    sr += "\",\"REL03\":\"";
+    sr += val03;
+    sr += "\",\"REL04\":\"";
+    sr += val04;
+    sr += "\",\"IP\":\"";
+    sr += String(WiFi.localIP().toString().c_str());
+    sr += "\"}]";
+    client.print(F("Content-Length:"));
+    client.print(sr.length());
+    client.print(F("\r\n\r\n"));
+    client.print(sr);
+   
 
   // Send the response to the client
-  client.print(s);
+ // client.print(s);
   delay(1);
   Serial.println("Client disonnected");
 
