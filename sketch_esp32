@@ -1,5 +1,5 @@
-
- /*  This sketch demonstrates how to set up a simple HTTP-like server.
+/*
+ *  This sketch demonstrates how to set up a simple HTTP-like server.
  *  The server will set a GPIO pin depending on the request
  *    http://server_ip/Relay01=0 will set the GPI25 low,
  *    http://server_ip/Relay01=1 will set the GPI25 high
@@ -32,19 +32,19 @@ void setup() {
   delay(10);
   
 
-  // prepare GPIO4 PIN D25 ESP32
+  // prepare GPI25 PIN D25 ESP32
   pinMode(25, OUTPUT);
   digitalWrite(25, 0);
   
-  // prepare GPIO5 PIN D26 ESP32
+  // prepare GPI26 PIN D26 ESP32
   pinMode(26, OUTPUT);
   digitalWrite(26, 0);
 
-   // prepare GPIO14 PIN D32 ESP32
+   // prepare GPIO32 PIN D32 ESP32
   pinMode(32, OUTPUT);
   digitalWrite(32, 0);
   
-  // prepare GPIO12 PIN D33 ESP32
+  // prepare GPIO33 PIN D33 ESP32
   pinMode(33, OUTPUT);
   digitalWrite(33, 0);
 
