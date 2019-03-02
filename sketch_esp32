@@ -1,5 +1,5 @@
 
- *  This sketch demonstrates how to set up a simple HTTP-like server.
+ /*  This sketch demonstrates how to set up a simple HTTP-like server.
  *  The server will set a GPIO pin depending on the request
  *    http://server_ip/Relay01=0 will set the GPI25 low,
  *    http://server_ip/Relay01=1 will set the GPI25 high
